@@ -1,1 +1,1 @@
-//= link_directory ../stylesheets/auto_validations .css
+//= link_directory ../stylesheets/active_record_auto_validations .css

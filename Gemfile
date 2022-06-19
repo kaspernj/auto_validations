@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-# Specify your gem's dependencies in auto_validations.gemspec.
+# Specify your gem's dependencies in active_record_auto_validations.gemspec.
 gemspec
 
 gem "sqlite3"

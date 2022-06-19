@@ -1,7 +1,7 @@
-module AutoValidations::ModelConcern
+module ActiveRecordAutoValidations::ModelConcern
   extend ActiveSupport::Concern
 
   included do |base|
-    AutoValidations::AutoValidateModelClass.execute!(model_class: base)
+    ActiveRecordAutoValidations::AutoValidateModelClass.execute!(model_class: base)
   end
 end

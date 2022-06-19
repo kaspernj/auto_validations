@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount AutoValidations::Engine => "/auto_validations"
+  mount ActiveRecordAutoValidations::Engine => "/active_record_auto_validations"
 end

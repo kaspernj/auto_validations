@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    auto_validations (0.0.1)
+    active_record_auto_validations (0.0.1)
       rails (>= 7.0.3)
 
 GEM
@@ -160,7 +160,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  auto_validations!
+  active_record_auto_validations!
   sprockets-rails
   sqlite3
 

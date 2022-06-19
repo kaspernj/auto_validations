@@ -1,4 +1,4 @@
-class AutoValidations::AutoValidateModelClass < ApplicationService
+class ActiveRecordAutoValidations::AutoValidateModelClass < ApplicationService
   attr_reader :model_class
 
   def initialize(model_class:)
@@ -14,7 +14,7 @@ class AutoValidations::AutoValidateModelClass < ApplicationService
       return succeed!
     end
 
-    insert_auto_validations!
+    insert_active_record_auto_validations!
     succeed!
   end
 
@@ -22,7 +22,7 @@ class AutoValidations::AutoValidateModelClass < ApplicationService
     @columns ||= model_class.columns
   end
 
-  def insert_auto_validations!
+  def insert_active_record_auto_validations!
     columns.each do |column|
       next if column.name == "id" || column.name == "created_at" || column.name == "updated_at"
 

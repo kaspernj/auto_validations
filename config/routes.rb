@@ -1,2 +1,2 @@
-AutoValidations::Engine.routes.draw do
+ActiveRecordAutoValidations::Engine.routes.draw do
 end

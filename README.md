@@ -1,4 +1,4 @@
-# AutoValidations
+# ActiveRecordAutoValidations
 Short description and motivation.
 
 ## Usage
@@ -8,7 +8,7 @@ How to use my plugin.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "auto_validations"
+gem "active_record_auto_validations"
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install auto_validations
+$ gem install active_record_auto_validations
 ```
 
 ## Contributing

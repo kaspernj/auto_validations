@@ -1,4 +1,4 @@
-module AutoValidations
+module ActiveRecordAutoValidations
   class ApplicationMailer < ActionMailer::Base
     default from: "from@example.com"
     layout "mailer"
