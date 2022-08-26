@@ -17,10 +17,10 @@ describe Project do
 
   describe "max length validations" do
     it "adds maxlength validations" do
-      presence_validation = Project.validators_on(:name).find { |validator| validator.kind == :length }
+      max_length_validation = Project.validators_on(:name).find { |validator| validator.kind == :length }
 
-      expect(presence_validation.attributes).to eq [:name]
-      expect(presence_validation.options).to eq(allow_blank: true, maximum: 120)
+      expect(max_length_validation.attributes).to eq [:name]
+      expect(max_length_validation.options).to eq(allow_blank: true, maximum: 120)
     end
   end
 

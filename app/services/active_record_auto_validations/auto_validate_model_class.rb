@@ -55,20 +55,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
-      auto_validate_uniqueness_on_columns!(index) if index.unique
-    end
-  end
-
-  def auto_validate_uniqueness_on_columns!(index)
-    last_column_name = index.columns.last
-
-    rest_of_columns = index.columns.clone
-    rest_of_columns.pop
-
-    if rest_of_columns.length.positive?
-      model_class.validates last_column_name.to_sym, uniqueness: {scope: rest_of_columns}
-    else
-      model_class.validates last_column_name.to_sym, uniqueness: true
+      ActiveRecordAutoValidations::AutoUniqueIndex.execute!(columns: columns, model_class: model_class, index: index) if index.unique
     end
   end
 
