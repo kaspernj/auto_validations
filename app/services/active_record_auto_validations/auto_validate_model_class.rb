@@ -1,11 +1,18 @@
-class ActiveRecordAutoValidations::AutoValidateModelClass < ActiveRecordAutoValidations::ApplicationService
+class ActiveRecordAutoValidations::AutoValidateModelClass
   attr_reader :model_class
+
+  def self.execute!(model_class:)
+    ActiveRecordAutoValidations::AutoValidateModelClass.new(model_class: model_class).perform
+  end
 
   def initialize(model_class:)
     @model_class = model_class
   end
 
   def perform
+    check_if_already_loaded_on_model_class!
+    register_loaded_on_model_class!
+
     begin
       columns
     rescue ActiveRecord::StatementInvalid => e
@@ -15,7 +22,16 @@ class ActiveRecordAutoValidations::AutoValidateModelClass < ActiveRecordAutoVali
     end
 
     insert_active_record_auto_validations!
-    succeed!
+  end
+
+  def check_if_already_loaded_on_model_class!
+    auto_validations_loaded = model_class.instance_variable_get(:@_active_record_auto_validations_loaded)
+
+    raise "AutoValidations already loaded for #{model_class.name}" if auto_validations_loaded
+  end
+
+  def register_loaded_on_model_class!
+    model_class.instance_variable_set(:@_active_record_auto_validations_loaded, true)
   end
 
   def columns
@@ -31,13 +47,10 @@ class ActiveRecordAutoValidations::AutoValidateModelClass < ActiveRecordAutoVali
     end
   end
 
-  def presence_validation_exists_on_column?(_column)
-    # FIXME: Finish this
-
-    # Can't detect validators on a column because this gets executed before the rest of the model is loaded
-    # model_class.validators_on(column.name.to_sym).each do |validator|
-    #   binding.pry
-    # end
+  def presence_validation_exists_on_column?(column)
+    model_class.validators_on(column.name.to_sym).each do |validator|
+      return true if validator.kind == :presence
+    end
 
     false
   end
