@@ -21,7 +21,8 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
       return succeed!
     end
 
-    insert_active_record_auto_validations!
+    insert_active_record_auto_validations_from_columns!
+    insert_active_record_auto_validations_from_indexes!
   end
 
   def check_if_already_loaded_on_model_class!
@@ -42,14 +43,16 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
     @indexes ||= model_class.connection.indexes(model_class.table_name)
   end
 
-  def insert_active_record_auto_validations!
+  def insert_active_record_auto_validations_from_columns!
     columns.each do |column|
       next if column.name == "id" || column.name == "created_at" || column.name == "updated_at"
 
       auto_validate_pesence_on_column!(column) if auto_validate_presence_on_column?(column)
       auto_validate_max_length_on_column!(column) if auto_validate_max_length_on_column?(column)
     end
+  end
 
+  def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
       auto_validate_uniqueness_on_columns!(index)
     end
