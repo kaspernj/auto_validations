@@ -1,2 +1,2 @@
-ActiveRecordAutoValidations::Engine.routes.draw do
+ActiveRecordAutoValidations::Engine.routes.draw do # rubocop:disable Lint/EmptyBlock
 end

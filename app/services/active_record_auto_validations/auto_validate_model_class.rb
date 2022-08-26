@@ -1,4 +1,4 @@
-class ActiveRecordAutoValidations::AutoValidateModelClass < ApplicationService
+class ActiveRecordAutoValidations::AutoValidateModelClass < ActiveRecordAutoValidations::ApplicationService
   attr_reader :model_class
 
   def initialize(model_class:)
@@ -31,8 +31,19 @@ class ActiveRecordAutoValidations::AutoValidateModelClass < ApplicationService
     end
   end
 
+  def presence_validation_exists_on_column?(_column)
+    # FIXME: Finish this
+
+    # Can't detect validators on a column because this gets executed before the rest of the model is loaded
+    # model_class.validators_on(column.name.to_sym).each do |validator|
+    #   binding.pry
+    # end
+
+    false
+  end
+
   def auto_validate_presence_on_column?(column)
-    !column.null && !column.name.end_with?("_id") && column.default.nil?
+    !column.null && !column.name.end_with?("_id") && column.default.nil? && !presence_validation_exists_on_column?(column)
   end
 
   def auto_validate_pesence_on_column!(column)
