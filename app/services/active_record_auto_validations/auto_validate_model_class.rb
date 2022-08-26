@@ -31,7 +31,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass < ActiveRecordAutoVali
     end
   end
 
-  def presence_validation_exists_on_column?(column)
+  def presence_validation_exists_on_column?(_column)
     # FIXME: Finish this
 
     # Can't detect validators on a column because this gets executed before the rest of the model is loaded
