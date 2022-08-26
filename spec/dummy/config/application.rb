@@ -17,6 +17,14 @@ require "action_cable/engine"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+require "dotenv"
+file_path = File.realpath("#{__dir__}/../../../.env.local")
+raise ".env.local doesnt exist" unless File.exist?(file_path)
+
+Dotenv.load(file_path)
+raise "DATABASE_URL hasn't been defined in ENV" unless ENV.key?("DATABASE_URL")
+
 require "active_record_auto_validations"
 
 module Dummy; end

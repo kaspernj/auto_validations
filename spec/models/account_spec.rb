@@ -21,6 +21,12 @@ describe Account do
     expect(presence_validation.options).to eq(allow_blank: true, maximum: 255)
   end
 
+  it "doesnt add max length validation if one is manually defined" do
+    max_length_validations = Account.validators_on(:vat_number).select { |validator| validator.kind == :length }
+
+    expect(max_length_validations).to have_attributes(length: 1)
+  end
+
   it "adds a uniqueness validation to the name field" do
     presence_validation = Account.validators_on(:name).find { |validator| validator.kind == :uniqueness }
 
