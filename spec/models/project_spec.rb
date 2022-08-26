@@ -35,7 +35,7 @@ describe Project do
     it "doesnt add a uniqueness validation to an index that isnt unique" do
       uniqueness_validation = Project.validators_on(:account_id).find { |validator| validator.kind == :uniqueness }
 
-      expect(uniqueness_validation).to be nil
+      expect(uniqueness_validation).to be_nil
     end
   end
 end
