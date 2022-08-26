@@ -38,12 +38,33 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
     @columns ||= model_class.columns
   end
 
+  def indexes
+    @indexes ||= model_class.connection.indexes(model_class.table_name)
+  end
+
   def insert_active_record_auto_validations!
     columns.each do |column|
       next if column.name == "id" || column.name == "created_at" || column.name == "updated_at"
 
       auto_validate_pesence_on_column!(column) if auto_validate_presence_on_column?(column)
       auto_validate_max_length_on_column!(column) if auto_validate_max_length_on_column?(column)
+    end
+
+    indexes.each do |index|
+      auto_validate_uniqueness_on_columns!(index)
+    end
+  end
+
+  def auto_validate_uniqueness_on_columns!(index)
+    last_column_name = index.columns.last
+
+    rest_of_columns = index.columns.clone
+    rest_of_columns.pop
+
+    if rest_of_columns.length.positive?
+      model_class.validates last_column_name.to_sym, uniqueness: {scope: rest_of_columns}
+    else
+      model_class.validates last_column_name.to_sym, uniqueness: true
     end
   end
 
