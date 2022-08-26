@@ -55,7 +55,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
-      auto_validate_uniqueness_on_columns!(index)
+      auto_validate_uniqueness_on_columns!(index) if index.unique
     end
   end
 
