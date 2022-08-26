@@ -89,11 +89,19 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   end
 
   def auto_validate_max_length_on_column?(column)
-    column.type == :string && column.limit
+    column.type == :string && column.limit && !max_length_validation_exists_on_column?(column)
   end
 
   def auto_validate_max_length_on_column!(column)
     Rails.logger.info "AutoValidate: Adding maxlength of #{column.limit} validation to #{model_class.table_name}##{column.name}"
     model_class.validates column.name.to_sym, allow_blank: true, length: {maximum: column.limit}
+  end
+
+  def max_length_validation_exists_on_column?(column)
+    model_class.validators_on(column.name.to_sym).each do |validator|
+      return true if validator.kind == :length
+    end
+
+    false
   end
 end
