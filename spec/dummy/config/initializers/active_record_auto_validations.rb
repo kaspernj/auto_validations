@@ -1,3 +1,3 @@
-Rails.autoloaders.main.on_load do |klass_name, klass, defined_by_file|
+Rails.autoloaders.main.on_load do |_klass_name, klass, _defined_by_file|
   ActiveRecordAutoValidations::OnLoad.execute!(klass: klass)
 end
