@@ -15,10 +15,11 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
     begin
       columns
+      indexes
     rescue ActiveRecord::StatementInvalid => e
       # Database is probably not running - we need to ignore this to make stuff like db:migrate, db:schema:load work
       Rails.logger.error "AutoValidate: Ignoring error while loading columns, because database might not be initialized: #{e.message}"
-      return succeed!
+      return
     end
 
     insert_active_record_auto_validations_from_columns!
