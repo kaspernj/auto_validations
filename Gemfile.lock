@@ -94,6 +94,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.16.3)
+    mysql2 (0.5.4)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -212,6 +213,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_auto_validations!
+  mysql2
   rspec-rails
   rubocop
   rubocop-performance

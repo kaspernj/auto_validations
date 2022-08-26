@@ -1,6 +1,20 @@
 rvm: true
 before_script:
   - cd spec/dummy && bundle exec rails db:environment:set db:create db:schema:load RAILS_ENV=test
+environment:
+  DATABASE_URL: mysql2://peakflow:password@mariadb:3306
+services:
+  mariadb:
+    environment:
+      MARIADB_USER: peakflow
+      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: active_record_auto_validations_test_test
+    image: mariadb:latest
+    expose:
+      - 3306
+    mem_limit: 4096m
+    restart_policy: always
 builds:
   build_1:
     environment:
