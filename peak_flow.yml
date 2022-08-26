@@ -10,7 +10,7 @@ services:
       MARIADB_USER: peakflow
       MARIADB_PASSWORD: password
       MARIADB_ROOT_PASSWORD: password
-      MARIADB_DATABASE: active_record_auto_validations_test_test
+      MARIADB_DATABASE: active_record_auto_validations_test
     image: mariadb:latest
     expose:
       - 3306
