@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 7.0.3"
-  spec.add_runtime_dependency "service_pattern", ">= 1.0.8"
   spec.add_development_dependency "mysql2"
   spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "rubocop"
