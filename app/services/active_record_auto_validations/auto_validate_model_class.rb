@@ -18,7 +18,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
       indexes
     rescue ActiveRecord::StatementInvalid => e
       # Database is probably not running - we need to ignore this to make stuff like db:migrate, db:schema:load work
-      Rails.logger.error "AutoValidate: Ignoring error while loading columns, because database might not be initialized: #{e.message}"
+      Rails.logger.error { "AutoValidate: Ignoring error while loading columns, because database might not be initialized: #{e.message}" }
       return
     end
 
@@ -55,7 +55,15 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
-      ActiveRecordAutoValidations::AutoUniqueIndex.execute!(columns: columns, model_class: model_class, index: index) if index.unique
+      next unless index.unique
+
+      # Dont add uniqueness validation to ActsAsList position columns
+      if index.columns.include?("position") && model_class.respond_to?(:acts_as_list_top)
+        Rails.logger.info { "AutoValidate: Skipping unique validation on #{model_class.table_name}##{index.columns.join(",")} because it looks like ActsAsList" }
+        next
+      end
+
+      ActiveRecordAutoValidations::AutoUniqueIndex.execute!(columns: columns, model_class: model_class, index: index)
     end
   end
 
@@ -72,7 +80,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   end
 
   def auto_validate_pesence_on_column!(column)
-    Rails.logger.info "AutoValidate: Adding presence validation to #{model_class.table_name}##{column.name}"
+    Rails.logger.info { "AutoValidate: Adding presence validation to #{model_class.table_name}##{column.name}" }
     model_class.validates column.name.to_sym, presence: true
   end
 
@@ -81,7 +89,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   end
 
   def auto_validate_max_length_on_column!(column)
-    Rails.logger.info "AutoValidate: Adding maxlength of #{column.limit} validation to #{model_class.table_name}##{column.name}"
+    Rails.logger.info { "AutoValidate: Adding maxlength of #{column.limit} validation to #{model_class.table_name}##{column.name}" }
     model_class.validates column.name.to_sym, allow_blank: true, length: {maximum: column.limit}
   end
 
