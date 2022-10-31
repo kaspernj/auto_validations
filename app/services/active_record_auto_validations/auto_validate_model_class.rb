@@ -59,7 +59,10 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
       # Dont add uniqueness validation to ActsAsList position columns
       if index.columns.include?("position") && model_class.respond_to?(:acts_as_list_top)
-        Rails.logger.info { "AutoValidate: Skipping unique validation on #{model_class.table_name}##{index.columns.join(",")} because it looks like ActsAsList" }
+        Rails.logger.info do
+          "AutoValidate: Skipping unique validation on #{model_class.table_name}##{index.columns.join(",")} because it looks like ActsAsList"
+        end
+
         next
       end
 
