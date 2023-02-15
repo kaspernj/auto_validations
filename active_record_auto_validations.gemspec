@@ -24,11 +24,4 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 7.0.3"
-  spec.add_development_dependency "dotenv-rails"
-  spec.add_development_dependency "mysql2"
-  spec.add_development_dependency "rspec-rails"
-  spec.add_development_dependency "rubocop"
-  spec.add_development_dependency "rubocop-performance"
-  spec.add_development_dependency "rubocop-rails"
-  spec.add_development_dependency "rubocop-rspec"
 end
