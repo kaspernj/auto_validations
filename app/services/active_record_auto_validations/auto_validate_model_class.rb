@@ -47,6 +47,12 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
     ignore_column_names.include?(column_name)
   end
 
+  def ignore_index?(index)
+    return true unless index.unique
+
+    index.columns.any? { |index_column_name| ignore_column?(index_column_name) }
+  end
+
   def indexes
     @indexes ||= model_class.connection.indexes(model_class.table_name)
   end
@@ -62,8 +68,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
 
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
-      next unless index.unique
-      next if index.columns.any? { |index_column_name| ignore_column?(index_column_name) }
+      next if ignore_index?(index)
 
       # Dont add uniqueness validation to ActsAsList position columns
       if index.columns.include?("position") && model_class.respond_to?(:acts_as_list_top)
