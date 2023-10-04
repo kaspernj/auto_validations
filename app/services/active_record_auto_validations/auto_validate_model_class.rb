@@ -1,11 +1,12 @@
 class ActiveRecordAutoValidations::AutoValidateModelClass
-  attr_reader :model_class
+  attr_reader :ignore_column_names, :model_class
 
-  def self.execute!(model_class:)
-    ActiveRecordAutoValidations::AutoValidateModelClass.new(model_class: model_class).perform
+  def self.execute!(...)
+    ActiveRecordAutoValidations::AutoValidateModelClass.new(...).perform
   end
 
-  def initialize(model_class:)
+  def initialize(ignore_column_names: [], model_class:)
+    @ignore_column_names = ignore_column_names
     @model_class = model_class
   end
 
@@ -18,7 +19,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
       indexes
     rescue ActiveRecord::StatementInvalid => e
       # Database is probably not running - we need to ignore this to make stuff like db:migrate, db:schema:load work
-      Rails.logger.error { "AutoValidate: Ignoring error while loading columns, because database might not be initialized: #{e.message}" }
+      Rails.logger.info { "AutoValidate: Ignoring error while loading columns, because database might not be initialized: #{e.message}" }
       return
     end
 
@@ -47,6 +48,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   def insert_active_record_auto_validations_from_columns!
     columns.each do |column|
       next if column.name == "id" || column.name == "created_at" || column.name == "updated_at"
+      next if ignore_column_names.include?(column.name)
 
       auto_validate_pesence_on_column!(column) if auto_validate_presence_on_column?(column)
       auto_validate_max_length_on_column!(column) if auto_validate_max_length_on_column?(column)
@@ -56,6 +58,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
       next unless index.unique
+      next if index.columns.any? { |index_column_name| ignore_column_names.any?(index_column_name) }
 
       # Dont add uniqueness validation to ActsAsList position columns
       if index.columns.include?("position") && model_class.respond_to?(:acts_as_list_top)
