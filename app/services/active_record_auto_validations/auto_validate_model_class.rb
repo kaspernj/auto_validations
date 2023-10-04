@@ -5,7 +5,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
     ActiveRecordAutoValidations::AutoValidateModelClass.new(...).perform
   end
 
-  def initialize(ignore_column_names: [], model_class:)
+  def initialize(model_class:, ignore_column_names: [])
     @ignore_column_names = ignore_column_names
     @model_class = model_class
   end
@@ -41,14 +41,19 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
     @columns ||= model_class.columns
   end
 
+  def ignore_column?(column_name)
+    return true if column_name == "id" || column_name == "created_at" || column_name == "updated_at"
+
+    ignore_column_names.include?(column_name)
+  end
+
   def indexes
     @indexes ||= model_class.connection.indexes(model_class.table_name)
   end
 
   def insert_active_record_auto_validations_from_columns!
     columns.each do |column|
-      next if column.name == "id" || column.name == "created_at" || column.name == "updated_at"
-      next if ignore_column_names.include?(column.name)
+      next if ignore_column?(column.name)
 
       auto_validate_pesence_on_column!(column) if auto_validate_presence_on_column?(column)
       auto_validate_max_length_on_column!(column) if auto_validate_max_length_on_column?(column)
@@ -58,7 +63,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   def insert_active_record_auto_validations_from_indexes!
     indexes.each do |index|
       next unless index.unique
-      next if index.columns.any? { |index_column_name| ignore_column_names.any?(index_column_name) }
+      next if index.columns.any? { |index_column_name| ignore_column?(index_column_name) }
 
       # Dont add uniqueness validation to ActsAsList position columns
       if index.columns.include?("position") && model_class.respond_to?(:acts_as_list_top)

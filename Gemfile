@@ -9,6 +9,7 @@ gem "sqlite3"
 group :development do
   gem "dotenv-rails"
   gem "mysql2"
+  gem "pry-rails"
   gem "rspec-rails"
   gem "rubocop"
   gem "rubocop-performance"
