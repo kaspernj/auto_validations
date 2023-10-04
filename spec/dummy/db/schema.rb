@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_26_074323) do
-  create_table "accounts", charset: "utf8mb4", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2023_10_04_115517) do
+  create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "vat_number", limit: 20
     t.string "callsign"
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_074323) do
     t.index ["name"], name: "index_accounts_on_name", unique: true
   end
 
-  create_table "projects", charset: "utf8mb4", force: :cascade do |t|
+  create_table "projects", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "name", limit: 120, null: false
     t.datetime "created_at", null: false
@@ -30,5 +30,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_26_074323) do
     t.index ["account_id"], name: "index_projects_on_account_id"
   end
 
+  create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tasks_on_name", unique: true
+    t.index ["project_id"], name: "index_tasks_on_project_id"
+  end
+
   add_foreign_key "projects", "accounts"
+  add_foreign_key "tasks", "projects"
 end
