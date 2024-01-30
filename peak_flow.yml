@@ -18,8 +18,8 @@ services:
 builds:
   build_1:
     environment:
-      RUBY_VERSION: 2.7.6
-    name: Ruby 2.7.6
+      RUBY_VERSION: 2.7.8
+    name: Ruby 2.7.8
     script:
       - bundle exec rspec
   build_2:

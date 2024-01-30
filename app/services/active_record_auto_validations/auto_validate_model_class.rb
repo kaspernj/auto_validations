@@ -92,7 +92,7 @@ class ActiveRecordAutoValidations::AutoValidateModelClass
   end
 
   def auto_validate_presence_on_column?(column)
-    !column.null && !column.name.end_with?("_id") && column.default.nil? && !presence_validation_exists_on_column?(column)
+    !column.null && !column.name.end_with?("_id") && column.default.nil? && column.default_function.nil? && !presence_validation_exists_on_column?(column)
   end
 
   def auto_validate_pesence_on_column!(column)
