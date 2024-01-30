@@ -273,7 +273,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   sprockets-rails
-  sqlite3
+  sqlite3 (= 1.6.9)
 
 BUNDLED WITH
    2.3.15
