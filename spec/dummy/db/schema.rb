@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_04_115517) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_30_120123) do
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "vat_number", limit: 20
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_115517) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "token", default: -> { "uuid()" }
     t.index ["name"], name: "index_tasks_on_name", unique: true
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end
